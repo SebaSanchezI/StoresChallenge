@@ -1,0 +1,12 @@
+element.style {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.MuiCardActionsRoot {
+    display: 'flex';
+    padding: '8px';
+    align-items: 'center';
+    justify-content: 'space-around'
+}

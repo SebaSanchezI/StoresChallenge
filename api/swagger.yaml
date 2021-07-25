@@ -1,0 +1,572 @@
+
+openapi: 3.0.1
+info:
+  title: API Store NCR
+  description: Esta API perimte obtener distintas tiendas y sus usuarios. 
+  contact:
+    name: Sebastian Sanchez
+    email: sebastian.sanchezisame@outlook.com
+    url: https://sebasanchezi.github.io/
+  license:
+    name: Node JS
+    url: https://nodejs.org/es/
+  version: 1.0.0
+servers:
+- url: http://localhost:3001/api
+
+tags:
+- name: Login
+  description: Datos del Usuario que se loguea.
+- name: Stores
+  description: Acceso a todos los datos de las Tiendas.
+- name: Users
+  description: Acceso a todos los datos de los usuarios.
+paths:
+  /login:
+    post:
+      tags:
+      - Login
+      summary: Obtiene los datos del usuario que ingresa las credenciales y el token de autenticacion.
+      operationId: loginUser
+      requestBody:
+        description: objeto de login que se envia para que el usuario pueda ingresar a la Home.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Login'
+        required: true
+      responses:
+        200:
+          description: (OK) Datos del usuario y token de autenticacion.
+          content:
+            apliaction/json:
+              schema: 
+                $ref: '#/components/schemas/LoginSuccessfuly'
+        401:
+          description: (Error) La contraseña es incorrecta.
+        404:
+          description: (Error) El usuario no se encontro en la base de datos
+  /stores:
+    get:
+      summary: Obtiene todas las tiendas de la BD.
+      tags:
+        - Stores
+      description: Obtiene todas las tiendas.
+      operationId: getStores
+      security:
+      - bearerAuth: []
+      parameters:
+        - in: header 
+          $ref: '#/components/schemas/Token' 
+      responses:
+        200: 
+          description: (OK) - Retorna un JSON array de objetos, cada objeto es una tienda.
+          content:
+            apliaction/json:
+              schema: 
+                type: array
+                items:
+                  $ref: '#/components/schemas/Store'
+        401:
+          description: (Error) - No tiene acceso porque no existe el token.
+          content:
+            apliaction/json:
+              schema:   
+                $ref: '#/components/responses/UnauthorizedError'
+        500:
+          description: (Error) - El token proporcionado no tiene validez.
+          content:
+            apliaction/json:
+              schema:   
+                $ref: '#/components/responses/ErrorServer'
+        511:
+          description: (Error) - El token proporcionado no tiene validez.
+          content:
+            apliaction/json:
+              schema:   
+                $ref: '#/components/responses/InvalidToken'
+  /stores/{id}:
+    get:
+      summary: Obtiene los usuarios de la tienda que coinicda con el ID proporcionado.
+      tags:
+        - Stores
+      description: Obtiene todos los datos de la tienda que coincida con el id. Proporciona la cantidad de usuarios y una lista de los mismos con todos sus datos.
+      operationId: getStoreId
+      security:
+      - bearerAuth: []
+      parameters:
+        - in: header 
+          $ref: '#/components/schemas/Token'
+        - name: id
+          in: path
+          description: Identificador de la tienda.
+      responses:
+        200: 
+          description: Successful query - Retorna un JSON con la cantidad de usuarios y  array de objetos, cada objeto es una usuario.
+          content:
+            apliaction/json:
+              schema: 
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        401:
+          description: (Access Denied) - No tiene acceso porque no existe el token.
+          content:
+            apliaction/json:
+              schema:   
+                $ref: '#/components/responses/UnauthorizedError'
+        500:
+          description: Token Decoding Failed - El token proporcionado no tiene validez.
+          content:
+            apliaction/json:
+              schema:   
+                $ref: '#/components/responses/ErrorServer'
+        511:
+          description: Token Decoding Failed - El token proporcionado no tiene validez.
+          content:
+            apliaction/json:
+              schema:   
+                $ref: '#/components/responses/InvalidToken'
+
+  /stores/stats/{id}:
+    get:
+      summary: Obtiene las estadisticas de la tienda que coincide con el ID proporcionado.
+      tags:
+        - Stores
+      description: Obtiene la cantidad de usuarios de esa tienda, la cantidad de cajeros y de supervisores. Ademas devuelve el porcentaje de cajeros y de supervisores en base al total de usuarios.
+      operationId: getStatsId
+      security:
+      - bearerAuth: []
+      parameters:
+        - in: header 
+          $ref: '#/components/schemas/Token'
+        - name: id
+          in: path
+          description: Identificador de la tienda.
+      responses:
+        200: 
+          description: (OK) - Retorna un JSON que contiene el total de usuarios, la cantidad de supervisores y cajeros. Ademas devuelve el porcentaje que representa cada tipo de usuario.
+          content:
+            apliaction/json:
+              schema: 
+                type: array
+                items:
+                  $ref: '#/components/schemas/StatsSuccesfuly'
+        401:
+          description: (Error) - No tiene acceso porque no existe el token.
+          content:
+            apliaction/json:
+              schema:   
+                $ref: '#/components/responses/UnauthorizedError'
+        500:
+          description: (Error) - El token proporcionado no tiene validez.
+          content:
+            apliaction/json:
+              schema:   
+                $ref: '#/components/responses/ErrorServer'
+        511:
+          description: (Error) - El token proporcionado no tiene validez.
+          content:
+            apliaction/json:
+              schema:   
+                $ref: '#/components/responses/InvalidToken'    
+#USER
+  /users:
+    get:
+      summary: Obtiene todos los usuarios de la BD.
+      tags:
+        - Users
+      description: Obtiene todos los usuarios existentes de la BD.
+      operationId: getAllUsers
+      security:
+      - bearerAuth: []
+      parameters:
+        - in: header 
+          $ref: '#/components/schemas/Token'
+      responses:
+        200: 
+          description: (OK) - Retorna un JSON con la cantiad de usuarios y un array de objetos, cada objeto es una usuario.
+          content:
+            apliaction/json:
+              schema: 
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        401:
+          description: (Error) - No tiene acceso porque no existe el token.
+          content:
+            apliaction/json:
+              schema:   
+                $ref: '#/components/responses/UnauthorizedError'
+        500:
+          description: Token Decoding Failed - El token proporcionado no tiene validez.
+          content:
+            apliaction/json:
+              schema:   
+                $ref: '#/components/responses/ErrorServer'
+        511:
+          description: Token Decoding Failed - El token proporcionado no tiene validez.
+          content:
+            apliaction/json:
+              schema:   
+                $ref: '#/components/responses/InvalidToken'
+#POST
+    post:
+      summary: Ingresa un usuario a la BD.
+      tags:
+        - Users
+      description: Se ingresa un usuario nuevo a la BD. Cada usuario se ingresa con Nombre, Apellido, Usuario, Perfil, Email,Contraseña y ID de Tienda donde trabaja.
+      operationId: postUser
+      security:
+      - bearerAuth: []
+      parameters:
+        - in: header 
+          $ref: '#/components/schemas/Token'
+      requestBody:
+        description: objeto con los datos del usuario a agregar.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserPost'
+        required: true
+      responses:
+        201: 
+          description: (OK) - Retorna un JSON con un mensaje de creacion correcta y los datos del usuario creado.
+          content:
+            apliaction/json:
+              schema: 
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        400:
+          description: (Error) - Datos invalidos.
+          content:
+            apliaction/json:
+              schema:   
+                $ref: '#/components/responses/DataEmpty'
+        401:
+          description: (Error) - No tiene acceso porque no existe el token.
+          content:
+            apliaction/json:
+              schema:   
+                $ref: '#/components/responses/UnauthorizedError'
+        500:
+          description: (Error) - El token proporcionado no tiene validez.
+          content:
+            apliaction/json:
+              schema:   
+                $ref: '#/components/responses/ErrorServer'
+        511:
+          description: (Error) - El token proporcionado no tiene validez.
+          content:
+            apliaction/json:
+              schema:   
+                $ref: '#/components/responses/InvalidToken'
+#PUT
+    put:
+      summary: Actualiza los datos de un usuario a la BD.
+      tags:
+        - Users
+      description: Se actualizan los datos de un usuario.
+      operationId: putUser
+      security:
+      - bearerAuth: []
+      parameters:
+        - in: header 
+          $ref: '#/components/schemas/Token'
+      requestBody:
+        description: objeto con los datos del usuario a actualizar.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      responses:
+        200: 
+          description: (OK) - Retorna un JSON con un mensaje de actualizacion correcta.
+        400:
+          description: (Error) - Datos invalidos.
+          content:
+            apliaction/json:
+              schema:   
+                $ref: '#/components/responses/DataEmpty'
+        401:
+          description: (Error) - No tiene acceso porque no existe el token.
+          content:
+            apliaction/json:
+              schema:   
+                $ref: '#/components/responses/UnauthorizedError'
+        500:
+          description: (Error) - El token proporcionado no tiene validez.
+          content:
+            apliaction/json:
+              schema:   
+                $ref: '#/components/responses/ErrorServer'
+        511:
+          description: (Error) - El token proporcionado no tiene validez.
+          content:
+            apliaction/json:
+              schema:   
+                $ref: '#/components/responses/InvalidToken'
+  
+  /users/{id}:
+    get:
+      summary: Obtiene el usuario que coincide con el ID ingresado.
+      tags:
+        - Users
+      description: Obtiene todos los datos del usuario que coincida con el ID. 
+      operationId: getUser
+      security:
+      - bearerAuth: []
+      parameters:
+        - in: header 
+          $ref: '#/components/schemas/Token'
+        - name: id
+          in: path
+          description: Identificador del usuario.
+      responses:
+        200: 
+          description: (OK) - Retorna un JSON con el usuario solicitado.
+          content:
+            apliaction/json:
+              schema: 
+                type: object
+                items:
+                  $ref: '#/components/schemas/User'
+        400:
+          description: (Error) - Datos invalidos.
+          content:
+            apliaction/json:
+              schema:   
+                $ref: '#/components/responses/DataEmpty'
+        401:
+          description: (Error) - No tiene acceso porque no existe el token.
+          content:
+            apliaction/json:
+              schema:   
+                $ref: '#/components/responses/UnauthorizedError'
+        404:
+          description: (Error) - Usuario no encontrado.
+          content:
+            apliaction/json:
+              schema:   
+                $ref: '#/components/responses/NotFound'
+        500:
+          description: (Error) - El token proporcionado no tiene validez.
+          content:
+            apliaction/json:
+              schema:   
+                $ref: '#/components/responses/ErrorServer'
+        511:
+          description: (Error) - El token proporcionado no tiene validez.
+          content:
+            apliaction/json:
+              schema:   
+                $ref: '#/components/responses/InvalidToken'
+#DELETE
+    delete:
+      summary: Elimina el usuario que coincide con el ID ingresado.
+      tags:
+        - Users
+      description: Elimina el usuario que coincide con el ID ingresado.
+      operationId: deleteUser
+      security:
+      - bearerAuth: []
+      parameters:
+        - in: header 
+          $ref: '#/components/schemas/Token'
+        - name: id
+          in: path
+          description: Identificador del usuario.
+      responses:
+        200: 
+          description: (OK) - Retorna un JSON con un mensaje que el usuario se elimino con exito.
+        400:
+          description: (Error) - Datos invalidos.
+          content:
+            apliaction/json:
+              schema:   
+                $ref: '#/components/responses/DataEmpty'
+        401:
+          description: (Error) - No tiene acceso porque no existe el token.
+          content:
+            apliaction/json:
+              schema:   
+                $ref: '#/components/responses/UnauthorizedError'
+        404:
+          description: (Error) - Usuario no encontrado.
+          content:
+            apliaction/json:
+              schema:   
+                $ref: '#/components/responses/NotFound'
+        500:
+          description: (Error) - El token proporcionado no tiene validez.
+          content:
+            apliaction/json:
+              schema:   
+                $ref: '#/components/responses/ErrorServer'
+        511:
+          description: (Error) - El token proporcionado no tiene validez.
+          content:
+            apliaction/json:
+              schema:   
+                $ref: '#/components/responses/InvalidToken'
+components:
+  #parameters:
+  responses:
+    UnauthorizedError:
+      description: (Unauthorized) no tiene autorizacion.
+    InvalidToken:
+      description: (Token Decoding Failed) El token proporcionado no tiene validez.
+    ErrorServer:
+        description: (ErrorServer) Error interno del servidor que no puede resolver.
+    NotFound:
+        description: (NotFound) No se encontro la informacion
+    DataEmpty:
+      description: (Data empty) La informacion esta vacia.
+
+    
+  schemas:
+    Login:
+      required:
+      - login
+      - password
+      type: object
+      properties:
+            login:
+                type: string
+                description: email o nombre de usuario.
+                example: ssanchez
+            password:
+                type: string
+                description: la contraseña.
+                example: 123456
+    User:
+      type: object
+      required:
+        - id
+        - name
+        - last_name
+        - user_name
+        - email
+        - password
+        - store_id
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: sebastian
+        last_name:
+          type: string
+          example: sanchez
+        user_name:
+          type: string
+          example: ssanchez
+        email:
+          type: string
+          example: sebastian@mail.com
+        password:
+          type: string
+          example: '123456'
+        profile:
+          type: string
+          example: supervisor
+        image:
+          type: string
+          example: https://cdn.icon-icons.com/icons2/2859/PNG/512/avatar_face_man_boy_male_profile_smiley_happy_people_icon_181657.png
+        store_id:
+          type: integer
+          example: 1
+    Token:
+      description: token de autenticacion.
+      type: string
+      example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo0LCJuYW1lIjoic2ViYXN0aWFuIiwibGFzdF9uYW1lIjoic2FuY2hleiIsInVzZXJfbmFtZSI6InNzYW5jaGV6IiwiZW1haWwiOiJzZWJhQG1haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkaGlhY1VaS1ZHcDRWazJkMjAvTUJUT29SUmtiWjEzN3dWbktUZUxYcjg1VEQ4R1hoUldwak8iLCJwcm9maWxlIjoiY2FqZXJvIiwiaW1hZ2UiOm51bGwsInN0b3JlX2lkIjoxfSwiaWF0IjoxNjI1MjY1MTEwLCJleHAiOjE2MjUzNTE1MTB9.2dAJRd8vP-4fRXcZrDZCpMjn0b9zdsRjPrs-1zKXCiM
+    Store:
+      type: object
+      required:
+        [id,name,address,city,postal code,image]
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Red Sport
+        address: 
+          type: string
+          example: san martin 2345
+        city:
+          type: string
+          example: santa fe
+        postal_code:
+          type: string
+          example: 3000
+        image: 
+          type: string
+          example: https://d26lpennugtm8s.cloudfront.net/stores/278/672/rte/corner-3.jpg
+    LoginSuccessfuly:
+      type: object
+      properties:
+          user: 
+            $ref: '#/components/schemas/User'
+          token: 
+            $ref: '#/components/schemas/Token'
+    StatsSuccesfuly:
+      type: object
+      properties:
+        total_users:
+            type: integer
+            example: 10
+        cashiers:
+          type: integer
+          example: 3
+        supervisor:
+          type: integer
+          example: 7
+        porcent_cashiers:
+          type: number
+          example: 33.33
+        porcent_supervisor:
+          type: number
+          example: 66.66
+    UserPost:
+      type: object
+      required:
+        - name
+        - last_name
+        - user_name
+        - email
+        - password
+        - store_id
+      properties:
+        name:
+          type: string
+          example: sebastian
+        last_name:
+          type: string
+          example: sanchez
+        user_name:
+          type: string
+          example: ssanchez
+        email:
+          type: string
+          example: sebastian@mail.com
+        password:
+          type: string
+          example: '123456'
+        profile:
+          type: string
+          example: supervisor
+        store_id:
+          type: integer
+          example: 1
+
+
+  securitySchemes:
+    bearerAuth:     
+      type: http
+      scheme: bearer
+      bearerFormat: JWT  
+     

@@ -1,0 +1,27 @@
+footer{
+    width: 100%;
+    height: max-content;
+    margin-top: 10px;
+    background-color: black;
+    position: relative;
+    bottom: 0;
+    height: auto; /* lo mismo que la nav */
+    color: white;
+    display: flex;
+    justify-content: center;
+}
+
+.ul {
+    font-size: 1em;
+    list-style: none;
+    padding: 5px 5px 5px 5px;
+    display: flex;
+    align-content: stretch;
+    justify-content: space-evenly;
+    align-items: flex-end;
+}
+
+.ul li {
+    color: rgba(248, 247, 247, 0.959);
+    line-height: 1;
+}

@@ -1,0 +1,61 @@
+.ctn{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background-color: #2b4d8f;
+    min-height: 100vh;
+    font-size: calc(5px + 2vmin);
+    color: #2b4d8f;
+}
+.ctn strong {
+    font-size: calc(5px + 1vmin);
+}
+.login{
+    background-color: white;
+    width: 25vw;
+    min-width: 35vh;
+}
+.form{
+    padding: 5px 5px 5px 5px;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+}
+.formAction{
+    padding: 5px 5px 5px 5px;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    justify-content: center;
+    align-items: center;
+}
+.text, .password{
+    margin:25px;
+    background-color: #ebebeb;
+    width: '25ch';
+}
+
+.label{
+    text-align: left;
+}
+/* .btn{
+   
+    
+    margin:50px;
+    padding-top: 10.5px;
+    padding-bottom: 100.5px;
+} */
+
+.strong{
+    color: rgb(189, 7, 7);
+    padding: 15px 15px 15px 15px;
+    animation: blinker 1s step-start infinite;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}

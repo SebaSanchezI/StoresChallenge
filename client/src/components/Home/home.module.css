@@ -1,0 +1,24 @@
+.ctn{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-flow: column nowrap;
+    min-height: calc(100vh - 64px - 84px);
+}
+
+
+.cards{
+    width: 100%;
+    display: flex;
+    justify-content:space-around;
+    padding:10px 10px 10px 10px;
+}
+
+@media all and (max-width:800px){
+    .cards{
+        flex-direction: column;
+        align-items: center;
+        margin: 20px;
+    }
+    
+}

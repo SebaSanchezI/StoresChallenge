@@ -1,0 +1,77 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Probando componente <Login /> debe renderizar correctamente el componente. 1`] = `
+<div
+  className="ctn"
+>
+  <div
+    className="login"
+  >
+    <h1>
+      LOGIN
+    </h1>
+    <form
+      className="form"
+      onSubmit={[Function]}
+    >
+      <WithStyles(ForwardRef(FormControl))
+        variant="filled"
+      >
+        <WithStyles(ForwardRef(OutlinedInput))
+          autoFocus={true}
+          className="text"
+          id="inputLogin"
+          label="Login"
+          margin="dense"
+          name="login"
+          onChange={[Function]}
+          placeholder="Enter your email or username"
+          value=""
+        />
+      </WithStyles(ForwardRef(FormControl))>
+      <WithStyles(ForwardRef(FormControl))
+        className="form"
+      >
+        <WithStyles(ForwardRef(OutlinedInput))
+          className="text"
+          endAdornment={
+            <WithStyles(ForwardRef(InputAdornment))
+              position="end"
+            >
+              <WithStyles(ForwardRef(IconButton))
+                className="text"
+                edge="end"
+                onClick={[Function]}
+              >
+                <Memo />
+              </WithStyles(ForwardRef(IconButton))>
+            </WithStyles(ForwardRef(InputAdornment))>
+          }
+          id="inputPassword"
+          label="Pasword"
+          margin="dense"
+          name="password"
+          onChange={[Function]}
+          placeholder="Enter your password"
+          type="password"
+          value=""
+        />
+      </WithStyles(ForwardRef(FormControl))>
+      <WithStyles(ForwardRef(FormControl))
+        className="formAction"
+      >
+        <WithStyles(ForwardRef(Button))
+          color="primary"
+          id="btn"
+          margin="dense"
+          size="medium"
+          type="submit"
+          variant="contained"
+        >
+          SingIn
+        </WithStyles(ForwardRef(Button))>
+      </WithStyles(ForwardRef(FormControl))>
+    </form>
+  </div>
+</div>
+`;
