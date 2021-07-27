@@ -12,6 +12,9 @@
 .ctn strong {
     font-size: calc(5px + 1vmin);
 }
+.logo{
+    width: 100%;
+}
 .login{
     background-color: white;
     width: 25vw;
@@ -40,13 +43,6 @@
 .label{
     text-align: left;
 }
-/* .btn{
-   
-    
-    margin:50px;
-    padding-top: 10.5px;
-    padding-bottom: 100.5px;
-} */
 
 .strong{
     color: rgb(189, 7, 7);
@@ -55,7 +51,7 @@
 }
 
 @keyframes blinker {
-  50% {
-    opacity: 0;
-  }
+    50% {
+        opacity: 0;
+    }
 }

@@ -3,7 +3,6 @@ import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 
 import Context from '../context/UserContext';
-//import { SERVER_URL } from '';
 
 
 export default function useUser(){
@@ -19,7 +18,6 @@ export default function useUser(){
     const login = async ({login, password})=>{
         //values es un objeto que tiene props login y password
         try {
-            setLoadingState({loading:true, errors: false});
             const res = await axios({
                 url: 'http://localhost:3001/api/login',
                 method:'POST',
@@ -33,15 +31,18 @@ export default function useUser(){
             //seteo userContext
             setUser(userSesion);
             history.push('/home');
+            return 'OK';
         } catch (error) {
-            console.error('ERROR LOGIN',error.response.data.message)
             window.sessionStorage.removeItem('user');
             setUser(null);
             setLoadingState({
                 errors: true,
                 message: error.response.data.message
             });
+
+        return error.response.data.message;
         }
+        
     }
 
     const logout = ()=>{
@@ -55,6 +56,7 @@ export default function useUser(){
         login,
         logout,
         hasLoginError:loadingState.errors,
-        errorMessage:loadingState.message
+        errorMessage:loadingState.message,
+        setLoadingState
     }
 }

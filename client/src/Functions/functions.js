@@ -28,7 +28,7 @@ export const userExists = (type,userWanted,allUsers)=>{
 
 //Alertas
 //iconName puede ser: error, warning, success
-export const Alert = (title,iconName)=>{
+export const CustomAlert = (title,iconName)=>{
     const Toast = Swal.mixin({
         toast: true,
         position: 'bottom-end',

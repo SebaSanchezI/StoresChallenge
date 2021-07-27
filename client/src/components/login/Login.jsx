@@ -16,8 +16,8 @@ import styleLogin from './login.module.css'
 import useUser from '../../hooks/useUser';
 import Context from '../../context/UserContext';
 import { getToken } from '../../Functions/functions';
-import { Alert } from '../../Functions/functions';
-
+import { CustomAlert } from '../../Functions/functions';
+import logo from './LogoASF.png';
 const Login = () => {
 
 
@@ -27,8 +27,7 @@ const Login = () => {
         password: '',
         showPassword: false,
     });
-    
-    const {login,hasLoginError,errorMessage} = useUser();
+    const {login,hasLoginError,errorMessage,setLoadingState} = useUser();
     const history = useHistory();
 
     const handleChange = (event) => {
@@ -38,25 +37,35 @@ const Login = () => {
     const handleClickShowPassword = () => {
         setValues({ ...values, showPassword: !values.showPassword });
     };
-    
-    const handleSubmit = (e)=>{
+
+    console.log('hasLoginError',hasLoginError)
+    const handleSubmit = async (e)=>{
         e.preventDefault()
         //consulta a la ruta
         if(!values.login || !values.password) {
-            console.log('pase ')
-            Alert('Fields can not be empty.','warning')//colocar Constantes >> crear archivo
+            CustomAlert('Fields can not be empty.','warning')//colocar Constantes >> crear archivo
         }
-        else { console.log('pase else');
-            login(values);
-            setValues({
-                login: '',
-                password: '',
-            })
-        }
-
+        else { 
+            const res = await login(values);
+            console.log('res',res)
+            setLoadingState({errors: false,
+                message:''
+            });
+            switch (res) {
+                case 'User not found.':
+                    document.getElementById('inputLogin').select();
+                    break;
+                case 'Incorrect password.':
+                    document.getElementById('inputPassword').select();
+                    break;
+                default:
+                    console.log('ok')
+            }
+            
+        }    
     }
 
-    
+
     //si esta logueado no puede volver a login
     //redirigir a home
     useEffect(() => {
@@ -66,8 +75,11 @@ const Login = () => {
 
     return ( 
         <div className={styleLogin.ctn}>
+            
             <div className={styleLogin.login}>
-                <h1>LOGIN</h1>
+                <div >
+                    <img src={logo} className={styleLogin.logo} alt="logo"/>
+                </div>
                 <form onSubmit={handleSubmit} className={styleLogin.form}>
                 <FormControl   variant="filled" >
                     <OutlinedInput
@@ -120,7 +132,7 @@ const Login = () => {
                                     SingIn
                     </Button>
                 </FormControl>
-                {hasLoginError && Alert (errorMessage,'error') }
+                {hasLoginError && CustomAlert (errorMessage,'error') }
                 </form>
             </div>
         </div>

@@ -6,7 +6,7 @@ export function UserContextProvider ({children}){
 
     const [user,setUser] = useState(
         //la funcion se ejecuta una sola vez
-       () => window.sessionStorage.getItem('user')
+        () => window.sessionStorage.getItem('user')
     );
     
     return <Context.Provider value = {{user,setUser}} >
